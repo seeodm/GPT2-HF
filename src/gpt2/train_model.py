@@ -15,7 +15,9 @@ class GPT2TrainingSpec(TrainingSpec):
                  vocab_size: int, n_positions: int, n_ctx: int,
                  n_embd: int, n_layer: int, n_head: int,
                  resid_pdrop: float, embd_pdrop: float, attn_pdrop: float,
-                 layer_norm_epsilon: float, initializer_range: float):
+                 layer_norm_epsilon: float, initializer_range: float,
+                 base_lr: float, wd_rate: float,
+                 total_steps: int, eval_steps: int, save_steps: int):
         self.train_corpus = train_corpus
         self.eval_corpus = eval_corpus
         self.vocab_path = vocab_path
@@ -34,21 +36,28 @@ class GPT2TrainingSpec(TrainingSpec):
         self.layer_norm_epsilon = layer_norm_epsilon
         self.initializer_range = initializer_range
 
+        self.base_lr = base_lr
+        self.wd_rate = wd_rate
+
+        self.total_steps = total_steps
+        self.eval_steps = eval_steps
+        self.save_steps = save_steps
+
     def initialize(self):
         self.vocab = Vocab(vocab_path=self.vocab_path)
-        self.config = GPT2Config(vocab_size=self.vocab_size, n_positions=self.dims,
-                                 n_ctx=self.seq_len, n_embd=self.dims, n_layer=self.layers,
-                                 n_head=self.heads, resid_pdrop=self.dropout, embd_pdrop=self.dropout,
-                                 attn_pdrop=self.dropout, layer_norm_epsilon=self.layer_norm_epsilon,
+        self.config = GPT2Config(vocab_size=self.vocab_size, n_positions=self.n_positions,
+                                 n_ctx=self.n_ctx, n_embd=self.n_embd, n_layer=self.n_layer,
+                                 n_head=self.n_head, resid_pdrop=self.resid_pdrop, embd_pdrop=self.embd_pdrop,
+                                 attn_pdrop=self.attn_pdrop, layer_norm_epsilon=self.layer_norm_epsilon,
                                  initializer_range=self.initializer_range)
 
     def prepare_datasets(self) -> Tuple[Dataset, Dataset]:
         train_dataset = TokenizedCorpus(corpus_path=self.train_corpus,
                                         vocab=self.vocab,
-                                        seq_len=self.seq_len)
+                                        seq_len=self.n_ctx)
         eval_dataset = TokenizedCorpus(corpus_path=self.eval_corpus,
                                        vocab=self.vocab,
-                                       seq_len=self.seq_len)
+                                       seq_len=self.n_ctx)
         return train_dataset, eval_dataset
 
     def construct_model(self) -> nn.Module:
@@ -82,7 +91,8 @@ def train_gpt2_model(args: argparse.Namespace):
         vocab_size=args.vocab_size, n_positions=args.dims, n_ctx=args.seq_len, n_embd=args.dims,
         n_layer=args.layers, n_head=args.heads, resid_pdrop=args.dropout, embd_pdrop=args.dropout,
         attn_pdrop=args.dropout, layer_norm_epsilon=args.layer_norm_epsilon,
-        initializer_range=args.initializer_range)
+        initializer_range=args.initializer_range, base_lr=args.base_lr, wd_rate=args.wd_rate,
+        total_steps=args.total_steps, eval_steps=args.eval_steps, save_steps=args.save_steps)
     config = TrainConfig(
         batch_train=args.batch_train, batch_eval=args.batch_eval,
         total_steps=args.total_steps, eval_steps=args.eval_steps,
