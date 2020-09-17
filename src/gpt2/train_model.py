@@ -96,7 +96,7 @@ def train_gpt2_model(args: argparse.Namespace):
                                 from_pretrained=args.from_pretrained)
 
 
-def add_subparser(subparsers: argparse._SubParsersAction):
+def add_subparsers(subparsers: argparse._SubParsersAction):
     parser = subparsers.add_parser('train', help='train GPT2 Model')
 
     group = parser.add_argument_group('Corpus and Vocabulary')
