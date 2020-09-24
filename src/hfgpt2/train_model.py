@@ -47,7 +47,7 @@ class GPT2TrainingSpec(TrainingSpec):
 
     def initialize(self):
         self.vocab = Vocab(vocab_path=self.vocab_path)
-        self.config = GPT2Config(vocab_size=self.vocab_size, n_positions=self.n_positions,
+        self.config = GPT2Config(self.vocab_size, n_positions=self.n_positions,
                                  n_ctx=self.n_ctx, n_embd=self.n_embd, n_layer=self.n_layer,
                                  n_head=self.n_head, resid_pdrop=self.resid_pdrop, embd_pdrop=self.embd_pdrop,
                                  attn_pdrop=self.attn_pdrop, layer_norm_epsilon=self.layer_norm_epsilon,
