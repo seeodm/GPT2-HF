@@ -89,7 +89,7 @@ class GPT2TrainingSpec(TrainingSpec):
 
 def train_gpt2_model(args: argparse.Namespace):
     spec = GPT2TrainingSpec(
-        train_corpus=args.train_corpus, eval_corpus=args.eval_corpus, vocab_path=args.vocab_path, seq_len=args.seq_len
+        train_corpus=args.train_corpus, eval_corpus=args.eval_corpus, vocab_path=args.vocab_path, seq_len=args.seq_len,
         vocab_size=args.vocab_size, n_positions=args.dims, n_ctx=args.dims, n_embd=args.dims,
         n_layer=args.layers, n_head=args.heads, resid_pdrop=args.dropout, embd_pdrop=args.dropout,
         attn_pdrop=args.dropout, layer_norm_epsilon=args.layer_norm_epsilon,
