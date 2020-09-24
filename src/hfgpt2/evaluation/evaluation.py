@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from gpt2-hf.data import Dataset
-from gpt2-hf.evaluation import EvaluationSpec, EvaluateConfig
+from hfgpt2.data import Dataset
+from hfgpt2.evaluation import EvaluationSpec, EvaluateConfig
 from typing import Optional, Dict
 
 

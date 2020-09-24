@@ -3,9 +3,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from transformers import GPT2LMHeadModel, GPT2Config
-from gpt2-hf.utils import fusing
-from gpt2-hf.training import TrainingSpec, TrainConfig, Trainer
-from gpt2-hf.data import Dataset, Vocab, TokenizedCorpus
+from hfgpt2.utils import fusing
+from hfgpt2.training import TrainingSpec, TrainConfig, Trainer
+from hfgpt2.data import Dataset, Vocab, TokenizedCorpus
 
 from typing import Tuple, Iterator, Dict
 

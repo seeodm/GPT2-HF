@@ -4,8 +4,8 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.distributed as dist
 import torch.multiprocessing as mp
-from gpt2-hf.data import Dataset
-from gpt2-hf.training import TrainingSpec, TrainConfig, Recorder
+from hfgpt2.data import Dataset
+from hfgpt2.training import TrainingSpec, TrainConfig, Recorder
 from typing import Dict, Optional
 
 try:

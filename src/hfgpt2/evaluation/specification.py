@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from gpt2-hf.data import Dataset
+from hfgpt2.data import Dataset
 from typing import Dict
 
 

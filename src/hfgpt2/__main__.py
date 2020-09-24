@@ -1,5 +1,5 @@
 import argparse
-from gpt2-hf import train_model, visualize_metrics
+from hfgpt2 import train_model, visualize_metrics
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

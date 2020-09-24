@@ -4,13 +4,13 @@
 
 ### How to train?
 
-You can  train GPT-2 by using as follows:
+You can train GPT-2 by using as follows:
 
-        $ python -m gpt2 train  --train_corpus  corpus_train.txt \
-                                --eval_corpus   corpus_eval.txt \
-                                --vocab_path    vocab.vocab \
-                                --batch_train   256 \
-                                --batch_eval    256  \
+        $ python -m hfgpt2 train --train_corpus  corpus_train.txt \
+                                 --eval_corpus   corpus_eval.txt \
+                                 --vocab_path    vocab.vocab \
+                                 --batch_train   256 \
+                                 --batch_eval    256  \
 
 The detail of command-line usage is as follows:
 
