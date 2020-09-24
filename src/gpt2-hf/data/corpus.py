@@ -1,5 +1,5 @@
 import torch
-from gpt2.data import Dataset, Vocab
+from gpt2-hf.data import Dataset, Vocab
 from typing import Dict, Any, List, Optional
 
 

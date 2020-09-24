@@ -1,5 +1,5 @@
 import regex as re
-from gpt2.data import Vocab
+from gpt2-hf.data import Vocab
 from typing import List
 import sentencepiece as spm
 

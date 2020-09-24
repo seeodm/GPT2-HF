@@ -3,15 +3,15 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from transformers import GPT2LMHeadModel, GPT2Config
-from gpt2.utils import fusing
-from gpt2.training import TrainingSpec, TrainConfig, Trainer
-from gpt2.data import Dataset, Vocab, TokenizedCorpus
+from gpt2-hf.utils import fusing
+from gpt2-hf.training import TrainingSpec, TrainConfig, Trainer
+from gpt2-hf.data import Dataset, Vocab, TokenizedCorpus
 
 from typing import Tuple, Iterator, Dict
 
 
 class GPT2TrainingSpec(TrainingSpec):
-    def __init__(self, train_corpus: str, eval_corpus: str, vocab_path: str,
+    def __init__(self, train_corpus: str, eval_corpus: str, vocab_path: str, seq_len: int,
                  vocab_size: int, n_positions: int, n_ctx: int,
                  n_embd: int, n_layer: int, n_head: int,
                  resid_pdrop: float, embd_pdrop: float, attn_pdrop: float,
@@ -21,6 +21,8 @@ class GPT2TrainingSpec(TrainingSpec):
         self.train_corpus = train_corpus
         self.eval_corpus = eval_corpus
         self.vocab_path = vocab_path
+
+        self.seq_len = seq_len
 
         self.vocab_size = vocab_size
         self.n_positions = n_positions
@@ -87,8 +89,8 @@ class GPT2TrainingSpec(TrainingSpec):
 
 def train_gpt2_model(args: argparse.Namespace):
     spec = GPT2TrainingSpec(
-        train_corpus=args.train_corpus, eval_corpus=args.eval_corpus, vocab_path=args.vocab_path,
-        vocab_size=args.vocab_size, n_positions=args.dims, n_ctx=args.seq_len, n_embd=args.dims,
+        train_corpus=args.train_corpus, eval_corpus=args.eval_corpus, vocab_path=args.vocab_path, seq_len=args.seq_len
+        vocab_size=args.vocab_size, n_positions=args.dims, n_ctx=args.dims, n_embd=args.dims,
         n_layer=args.layers, n_head=args.heads, resid_pdrop=args.dropout, embd_pdrop=args.dropout,
         attn_pdrop=args.dropout, layer_norm_epsilon=args.layer_norm_epsilon,
         initializer_range=args.initializer_range, base_lr=args.base_lr, wd_rate=args.wd_rate,
