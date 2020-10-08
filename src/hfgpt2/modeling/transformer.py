@@ -29,6 +29,11 @@ class GPT2LMHeadModel(GPT2PreTrainedModel):
         return_dict=None,
         **kwargs,
     ):
+        if "past" in kwargs:
+            past_key_values = kwargs.pop("past")
+        assert kwargs == {
+        }, f"Unexpected keyword arguments: {list(kwargs.keys())}."
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         transformer_outputs = self.transformer(
             input_ids,
