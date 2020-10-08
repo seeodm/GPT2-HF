@@ -52,7 +52,7 @@ class GPT2TrainingSpec(TrainingSpec):
                                  n_ctx=self.n_ctx, n_embd=self.n_embd, n_layer=self.n_layer,
                                  n_head=self.n_head, resid_pdrop=self.resid_pdrop, embd_pdrop=self.embd_pdrop,
                                  attn_pdrop=self.attn_pdrop, layer_norm_epsilon=self.layer_norm_epsilon,
-                                 initializer_range=self.initializer_range, use_return_dict=False)
+                                 initializer_range=self.initializer_range)
         self.criterion = nn.CrossEntropyLoss(
             ignore_index=self.vocab.pad_idx, reduction='mean')
 
