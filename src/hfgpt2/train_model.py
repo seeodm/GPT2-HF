@@ -2,8 +2,7 @@ import argparse
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from transformers import GPT2Config
-from hfgpt2.modeling import GPT2LMHeadModel
+from transformers import GPT2Config, GPT2LMHeadModel
 from hfgpt2.utils import fusing
 from hfgpt2.training import TrainingSpec, TrainConfig, Trainer
 from hfgpt2.data import Dataset, Vocab, TokenizedCorpus
@@ -53,8 +52,6 @@ class GPT2TrainingSpec(TrainingSpec):
                                  n_head=self.n_head, resid_pdrop=self.resid_pdrop, embd_pdrop=self.embd_pdrop,
                                  attn_pdrop=self.attn_pdrop, layer_norm_epsilon=self.layer_norm_epsilon,
                                  initializer_range=self.initializer_range)
-        self.criterion = nn.CrossEntropyLoss(
-            ignore_index=self.vocab.pad_idx, reduction='mean')
 
     def prepare_datasets(self) -> Tuple[Dataset, Dataset]:
         train_dataset = TokenizedCorpus(corpus_path=self.train_corpus,
@@ -79,23 +76,15 @@ class GPT2TrainingSpec(TrainingSpec):
 
     def train_objective(self, data: Dict[str, torch.Tensor], model: nn.Module
                         ) -> Dict[str, torch.Tensor]:
-        logits = model(input_ids=data['input'])
+        output = model(input_ids=data['input'])
 
-        shift_logits = logits[..., :-1, :].contiguous()
-        shift_labels = data['input'][..., 1:].contiguous()
-        loss = self.criterion(
-            shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
-        return {'loss': loss}
+        return {'loss': output[0]}
 
     def eval_objective(self, data: Dict[str, torch.Tensor], model: nn.Module
                        ) -> Dict[str, torch.Tensor]:
-        logits = model(input_ids=data['input'])
+        output = model(input_ids=data['input'])
 
-        shift_logits = logits[..., :-1, :].contiguous()
-        shift_labels = data['input'][..., 1:].contiguous()
-        loss = self.criterion(
-            shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
-        return {'loss': loss}
+        return {'loss': output[0]}
 
 
 def train_gpt2_model(args: argparse.Namespace):
