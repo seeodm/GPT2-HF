@@ -79,7 +79,7 @@ class GPT2TrainingSpec(TrainingSpec):
     def train_objective(self, data: Dict[str, torch.Tensor], model: nn.Module
                         ) -> Dict[str, torch.Tensor]:
         output = model(data['input'], labels=data['input'])
-        logits = output[1][0]
+        logits = output[1]
 
         shift_logits = logits[..., :-1, :].contiguous()
         shift_labels = data['input'][..., 1:].contiguous()
@@ -91,7 +91,7 @@ class GPT2TrainingSpec(TrainingSpec):
     def eval_objective(self, data: Dict[str, torch.Tensor], model: nn.Module
                        ) -> Dict[str, torch.Tensor]:
         output = model(data['input'], labels=data['input'])
-        logits = output[1][0]
+        logits = output[1]
 
         shift_logits = logits[..., :-1, :].contiguous()
         shift_labels = data['input'][..., 1:].contiguous()
