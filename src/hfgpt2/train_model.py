@@ -52,6 +52,8 @@ class GPT2TrainingSpec(TrainingSpec):
                                  n_head=self.n_head, resid_pdrop=self.resid_pdrop, embd_pdrop=self.embd_pdrop,
                                  attn_pdrop=self.attn_pdrop, layer_norm_epsilon=self.layer_norm_epsilon,
                                  initializer_range=self.initializer_range)
+        self.criterion = nn.CrossEntropyLoss(
+            ignore_index=self.vocab.pad_idx, reduction='mean')
 
     def prepare_datasets(self) -> Tuple[Dataset, Dataset]:
         train_dataset = TokenizedCorpus(corpus_path=self.train_corpus,
@@ -76,15 +78,27 @@ class GPT2TrainingSpec(TrainingSpec):
 
     def train_objective(self, data: Dict[str, torch.Tensor], model: nn.Module
                         ) -> Dict[str, torch.Tensor]:
-        output = model(input_ids=data['input'])
+        output = model(input_ids=data['input'], labels=data['input'])
+        logits = output[1][0]
 
-        return {'loss': output[0]}
+        shift_logits = logtis[..., :-1, :].contiguous()
+        shift_labels = data['input'][..., 1:].contiguous()
+        loss = self.criterion(
+            shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
+
+        return {'loss': loss}
 
     def eval_objective(self, data: Dict[str, torch.Tensor], model: nn.Module
                        ) -> Dict[str, torch.Tensor]:
-        output = model(input_ids=data['input'])
+        output = model(input_ids=data['input'], labels=data['input'])
+        logits = output[1][0]
 
-        return {'loss': output[0]}
+        shift_logits = logtis[..., :-1, :].contiguous()
+        shift_labels = data['input'][..., 1:].contiguous()
+        loss = self.criterion(
+            shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
+
+        return {'loss': loss}
 
 
 def train_gpt2_model(args: argparse.Namespace):

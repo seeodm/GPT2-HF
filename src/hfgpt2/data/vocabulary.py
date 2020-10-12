@@ -56,8 +56,7 @@ class Vocab(object):
 
     @property
     def pad_idx(self) -> int:
-        # return self.vocab[self.pad_token]
-        return -100
+        return self.vocab[self.pad_token]
 
     @property
     def cls_idx(self) -> int:
