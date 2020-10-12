@@ -81,7 +81,7 @@ class GPT2TrainingSpec(TrainingSpec):
         output = model(input_ids=data['input'], labels=data['input'])
         logits = output[1][0]
 
-        shift_logits = logtis[..., :-1, :].contiguous()
+        shift_logits = logits[..., :-1, :].contiguous()
         shift_labels = data['input'][..., 1:].contiguous()
         loss = self.criterion(
             shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
@@ -93,7 +93,7 @@ class GPT2TrainingSpec(TrainingSpec):
         output = model(input_ids=data['input'], labels=data['input'])
         logits = output[1][0]
 
-        shift_logits = logtis[..., :-1, :].contiguous()
+        shift_logits = logits[..., :-1, :].contiguous()
         shift_labels = data['input'][..., 1:].contiguous()
         loss = self.criterion(
             shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
